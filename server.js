@@ -16,7 +16,12 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(MONGODB_URI, {
+// Quick check that mongoose has been connected
+//mongoose.connection.on('connected', () => {
+//  console.log('Mongoose is connected!!!')
+//});
+
+mongoose.connect(MONGODB_URI || 'mongodb://localhost/budget', {
   useNewUrlParser: true,
   useFindAndModify: false
 });
