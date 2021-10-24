@@ -21,10 +21,14 @@ app.use(express.static("public"));
 //  console.log('Mongoose is connected!!!')
 //});
 
-mongoose.connect(MONGODB_URI || 'mongodb://localhost/budget', {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/budget', {
   useNewUrlParser: true,
   useFindAndModify: false
 });
+
+if (process.env.NODE_ENV === 'production') {
+  
+}
 
 // routes
 app.use(require("./routes/api.js"));
