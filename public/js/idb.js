@@ -1,13 +1,14 @@
 let db;
 const request = indexedDB.open('budget_tracker', 1);
 
-request.onupgradeneeded = function(event) { 
-    const db = event.target.result; 
+request.onupgradeneeded = function(event) {
+    const db = event.target.result;
     db.createObjectStore('new_budget', { autoIncrement: true });
 };
 
 request.onsuccess = function(event) {
     db = event.target.result;
+  
     if (navigator.onLine) {
       uploadBudget();
     }
@@ -17,21 +18,21 @@ request.onerror = function(event) {
     console.log(event.target.errorCode + 'from on error function by ryan');
 };
 
-function saveRecord(record) { 
+function saveRecord(record) {
     const transaction = db.transaction(['new_budget'], 'readwrite');
+  
     const budgetObjectStore = transaction.objectStore('new_budget');
+  
     budgetObjectStore.add(record);
     let trans = (record.value>0) ? "Deposit" : "Expense";
     alert(trans + " Added");
 }
 
 function uploadBudget() {
-    
     const transaction = db.transaction(['new_budget'], 'readwrite');
-    const budgetObjectStore = transaction.objectStore('new_budget');
-    const getAll = budgetObjectStore.getAll();
-  
-    getAll.onsuccess = function() {
+      const budgetObjectStore = transaction.objectStore('new_budget');
+      const getAll = budgetObjectStore.getAll();
+      getAll.onsuccess = function() {
         if (getAll.result.length > 0) {
         fetch('/api/transaction', {
             method: 'POST',
